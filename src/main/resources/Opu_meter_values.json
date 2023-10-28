@@ -1,0 +1,12 @@
+{
+  "meter_values": [
+    {
+      "meter_id": 5,
+      "period_date": "2023-09-30",
+      "reading_date": "2023-09-30",
+      "main_scale_value": "12612.000",
+      "type": 1,
+      "expenditure": "44.000"
+    }
+  ]
+}
