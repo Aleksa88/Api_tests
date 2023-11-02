@@ -1,7 +1,9 @@
 package com.ors;
 
+import com.ors.ConfigReader;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+
 import static io.restassured.RestAssured.given;
 
 public class Authorization {
@@ -21,12 +23,9 @@ public class Authorization {
                 .body("{\"login\": \"" + login + "\", \"password\": \"" + password + "\"}")
                 .post(apiUrl);
 
-        int statusCode = response.getStatusCode();
-        if (statusCode == 200) {
-            String token = response.jsonPath().getString("token");
-            return token;
+        if (response.getStatusCode() == 200) {
+            return response.getBody().jsonPath().getString("token");
         } else {
-            System.out.println("Failed to authenticate. Status code: " + statusCode);
             return null;
         }
     }

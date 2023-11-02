@@ -1,6 +1,7 @@
 package com.ors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Random;
@@ -10,22 +11,29 @@ public class JsonDataUpdater {
     private static final String[] FIRST_NAMES = {"Иван", "Петр", "Александр", "Дмитрий", "Андрей"};
     private static final String[] LAST_NAMES = {"Иванов", "Петров", "Сидоров", "Смирнов", "Кузнецов"};
     private static final String[] DOMAINS = {"gmail.com", "yahoo.com", "hotmail.com", "outlook.com"};
-    private static final int[] ROLE_IDS = {2967, 2968, 3375, 3376, 3381, 3383, 3444};
+    private static final Integer[] ROLE_IDS = {2967, 2968, 3375, 3376, 3381, 3383, 3444};
 
     public static void main(String[] args) {
-        ObjectMapper objectMapper = new ObjectMapper();
+        updateDataAndAuthenticate();
+    }
+
+    public static void updateDataAndAuthenticate() {
         try {
-            // Чтение JSON-объекта из файла
-            RandomData randomData = objectMapper.readValue(new File("src/main/resources/random_data.json"), RandomData.class);
+            ConfigReader configReader = new ConfigReader();
+            Authorization authorization = new Authorization(configReader);
+            String token = authorization.authenticate();
 
-            // Изменение данных
-            randomData.setEmail(generateRandomEmail());
-            randomData.setFirst_name(getRandomElement(FIRST_NAMES));
-            randomData.setLast_name(getRandomElement(LAST_NAMES));
-            randomData.setRole_ids(new int[]{getRandomElement(ROLE_IDS)});
-
-            // Запись обновленного JSON-объекта в файл
-            objectMapper.writeValue(new File("src/main/resources/random_data.json"), randomData);
+            if (token != null) {
+                ObjectMapper objectMapper = new ObjectMapper();
+                RandomData randomData = objectMapper.readValue(new File("src/main/resources/random_data.json"), RandomData.class);
+                randomData.setEmail(generateRandomEmail());
+                randomData.setFirst_name(getRandomElement(FIRST_NAMES));
+                randomData.setLast_name(getRandomElement(LAST_NAMES));
+                randomData.setRole_ids(new int[]{getRandomElement(ROLE_IDS)});
+                objectMapper.writeValue(new File("src/main/resources/random_data.json"), randomData);
+            } else {
+                System.out.println("Аутентификация не удалась.");
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -47,12 +55,7 @@ public class JsonDataUpdater {
         return sb.toString();
     }
 
-    private static String getRandomElement(String[] array) {
-        int index = random.nextInt(array.length);
-        return array[index];
-    }
-
-    private static int getRandomElement(int[] array) {
+    private static <T> T getRandomElement(T[] array) {
         int index = random.nextInt(array.length);
         return array[index];
     }
@@ -69,7 +72,6 @@ public class JsonDataUpdater {
         private int[] role_ids;
         private int[] house_groups;
         private boolean is_co_executor;
-
 
         public String getPhone() {
             return phone;
@@ -158,6 +160,7 @@ public class JsonDataUpdater {
         public void setIs_co_executor(boolean is_co_executor) {
             this.is_co_executor = is_co_executor;
         }
+
 
 
     }

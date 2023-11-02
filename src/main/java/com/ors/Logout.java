@@ -1,4 +1,6 @@
 package com.ors;
+
+import com.ors.ConfigReader;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 
@@ -12,17 +14,16 @@ public class Logout {
     }
 
     public void logout(String authToken) {
-        String apiUrl = configReader.getProperty("logoutUrl");
+        String logoutUrl = configReader.getProperty("logoutUrl");
 
         Response response = given()
                 .header("Authorization", "Bearer " + authToken)
                 .contentType(ContentType.JSON)
-                .post(apiUrl);
+                .post(logoutUrl);
 
         int statusCode = response.getStatusCode();
-
         if (statusCode == 204) {
-            System.out.println("Выход из системы выполнен успешно. Статус-код: " + statusCode);
+            System.out.println("Выход из системы выполнен успешно");
         } else {
             System.out.println("Не удалось выполнить выход из системы. Статус-код: " + statusCode);
         }

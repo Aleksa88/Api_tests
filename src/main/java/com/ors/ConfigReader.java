@@ -16,6 +16,10 @@ public class ConfigReader {
         return properties.getProperty(key);
     }
 
+    public String getPasswordResetUrl() {
+        return getProperty("passwordResetUrl");
+    }
+
     private void loadProperties() {
         try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("config.properties")) {
             if (inputStream != null) {

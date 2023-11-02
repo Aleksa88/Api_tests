@@ -13,6 +13,7 @@ public class LoginTest {
     private static ConfigReader configReader;
     private static Authorization authorization;
 
+
     @BeforeAll
     public static void setup() {
         configReader = new ConfigReader();
@@ -22,7 +23,6 @@ public class LoginTest {
     @Test
     public void testAuthentication() {
         String token = authorization.authenticate();
-
         if (token != null) {
             int statusCode = getAuthenticationStatusCode();
             if (statusCode == 200) {
@@ -33,7 +33,7 @@ public class LoginTest {
                 System.out.println("Неизвестный статус-код: " + statusCode);
             }
         } else {
-            System.out.println("Аутентификация не удалась.");
+            System.out.println(  "Аутентификация не удалась.");
         }
     }
 

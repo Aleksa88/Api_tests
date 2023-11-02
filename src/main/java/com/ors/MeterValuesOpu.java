@@ -3,6 +3,7 @@ package com.ors;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.apache.commons.io.FileUtils;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -34,7 +35,7 @@ public class MeterValuesOpu {
 
     private String readJsonFromFile(String fileName) {
         try {
-            File file = new File("src/main/resources/Opu_meter_values.json");
+            File file = new File("src/main/resources/" + fileName);
             return FileUtils.readFileToString(file, "UTF-8");
         } catch (IOException e) {
             e.printStackTrace();
